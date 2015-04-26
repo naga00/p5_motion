@@ -15,7 +15,6 @@ void initialize() {
   noStroke();
   vpX = width/2;
   vpY = height/2;
-  
   points = new Point3D[22];
   points[0] = new Point3D( -50, -250,  -50);
   points[1] = new Point3D(  50, -250,  -50);
@@ -387,5 +386,3 @@ class Point extends Object {
 class Object {
   Object() {}
 }
-
-
