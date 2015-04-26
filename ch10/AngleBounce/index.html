@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Processing.js Animation</title>
+	<meta name="description" content="Processing.js Animation Examples. Based on Keith Peters's book. " />
+	<meta name="keywords" content="processing, processing.js, flash, animation, false.jp, METAPHOR, metaphor, metaphor inc, metaphor.co.jp, Design, web, web design, toshiyuki nagashima, Reactive, Kinetic, Design, Interface, Interactive, Interaction, Interactive Art, Kinetic Art, Software Art" />
+	<meta name="Robots" content="index,follow" />	
+	<link rel="shortcut icon" href="" />
+	<link rel="home" href="" />
+	<link rel="index" href="" />
+	<script src="../../global/scripts/lib/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../global/scripts/lib/processing-1.4.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../global/scripts/base.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="../../global/styles/base.css" type="text/css" />
+	<script type="text/javascript" src="../../global/syntaxhighlighter3/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../../global/syntaxhighlighter3/scripts/shBrushJScript.js"></script>
+	<script type="text/javascript" src="../../global/syntaxhighlighter3/scripts/shBrushProcessing.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../global/syntaxhighlighter3/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+<body>
+<header id="globalheader">
+	<h1>ch10: AngleBounce</h1>
+</header>
+
+<div id="main">
+	<canvas id="canvas" data-processing-sources="AngleBounce.pde"></canvas>
+</div>
+
+<div class="sourceContainer">
+<script class="brush: processing; toolbar: false;" type="syntaxhighlighter"><![CDATA[
+Ball ball;
+Line lineObj;
+float gravity = 0.3;
+float bounce = -0.6;
+
+void setup() {
+  size(960, 700);
+  frameRate(30);
+  initialize();
+}
+
+void initialize() {
+  smooth();
+  noStroke();
+  ball = new Ball(40);
+  ball.x = 100;
+  ball.y = 100;
+  ball.setFillColor(color(255, 0, 0));
+  
+  lineObj = new Line();
+  lineObj.setStrokeColor(color(0, 0, 0));
+  lineObj.lineTo(300, 0);
+  lineObj.x = 50;
+  lineObj.y = 200;
+  lineObj.rotation = 30;
+}
+
+void draw() {
+  background(255);
+
+  ball.vy += gravity;
+  ball.x += ball.vx;
+  ball.y += ball.vy;
+  
+  float angle = lineObj.rotation * PI / 180;
+  float cosine = cos(angle);
+  float sine = sin(angle);
+  float x1 = ball.x - lineObj.x;
+  float y1 = ball.y - lineObj.y;
+  float x2 = cosine * x1 + sine * y1;
+  float y2 = cosine * y1 - sine * x1;
+  float vx1 = cosine * ball.vx + sine * ball.vy;
+  float vy1 = cosine * ball.vy - sine * ball.vx;
+
+  if(y2 > -ball.height / 2){
+    y2 = -ball.height / 2;
+    vy1 *= bounce;
+  }
+      
+  x1 = cosine * x2 - sine * y2;
+  y1 = cosine * y2 + sine * x2;
+  ball.vx = cosine * vx1 - sine * vy1;
+  ball.vy = cosine * vy1 + sine * vx1;
+  ball.x = lineObj.x + x1;
+  ball.y = lineObj.y + y1;
+
+  lineObj.update();
+  noStroke();
+  ball.update();
+}
+
+////////////////////////////////
+
+class Ball extends Sprite {
+  float radius;
+  float vx, vy;
+  
+  Ball(float radius){
+    super();
+    this.radius = radius;
+    width = radius*2;
+    height = radius*2;
+  }
+  
+  void draw(){
+    if(dist(mouseX, mouseY, x, y) < radius) {
+      isRollOver = true;
+    }else{
+      isRollOver = false;
+    }
+    ellipse(0, 0, radius*2, radius*2);
+  }
+}
+
+////////////////////////////////
+
+class Line extends Sprite {
+  float toX, toY;
+  
+  Line() {
+  }
+  
+  Rectangle getBounds() {
+    return new Rectangle(x, y, width, height);
+  }
+  
+  void lineTo(float toX, float toY) {
+    this.toX = toX;
+    this.toY = toY;
+    width = toX;
+    height = toY;
+  }
+  
+  void draw() {
+    line(0, 0, toX, toY);
+  }
+}
+
+////////////////////////////////
+
+class Rectangle {
+  float x, y;
+  float width, height; 
+  float top, bottom;
+  float left, right;
+  Point topLeft, bottomRight;
+  Point size;
+  
+  Rectangle(float x, float y, float width, float height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    top = y;
+    bottom = y + height;
+    left = x;
+    right = x + width;
+    topLeft = new Point(x, y);
+    bottomRight = new Point(right, bottom);
+    size = new Point(width, height);
+  }
+}
+
+////////////////////////////////
+
+class Sprite {
+  float x, y;
+  float scaleX, scaleY;
+  float width, height;
+  float rotation;
+  boolean visible;
+  color strokeColor;
+  color fillColor;
+  Boolean isStroke;
+  Boolean isFill;
+  Boolean isRollOver;
+  Boolean locked;
+  float xoff, yoff;
+ 
+  Sprite() {
+    x = 0.0;
+    y = 0.0;
+    scaleX = 1.0;
+    scaleY = 1.0;
+    width = 0;
+    height = 0;
+    rotation = 0.0;
+    strokeColor = color(0);
+    fillColor = color(0);
+    isStroke = false;
+    isFill = false;
+    isRollOver = false;
+    locked = false;
+    visible = true;
+  }
+  
+  void update() {
+    if(! visible) return;
+    pushMatrix();
+    if(locked){
+      x = mouseX - xoff;
+      y = mouseY - yoff;
+    }  
+    translate(x, y);
+    scale(scaleX, scaleY);
+    rotate(rotation * PI / 180.0);
+    if(isStroke) stroke(strokeColor);
+    if(isFill) fill(fillColor);
+    draw();
+    popMatrix();
+  }
+  
+  void setStrokeColor(color strokeColor) {
+    this.strokeColor = strokeColor;
+    isStroke = true;
+  }
+  
+  void setFillColor(color fillColor) {
+    this.fillColor = fillColor;
+    isFill = true;
+  }
+  
+  void startDrag() {
+    if(isRollOver){
+      locked = true;
+      xoff = mouseX - x;
+      yoff = mouseY - y;
+    }
+  }
+  
+  void stopDrag() {
+    locked = false;
+  }
+  
+  void draw() {}
+}
+
+////////////////////////////////
+
+class Point {
+  float x, y;
+  
+  Point(float x, float y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+]]></script>
+</div>
+
+
+<div class="readme">
+	<div class="readmebox">
+	<div class="readme_left">
+		<p>Processing.js Animation Examples. Based on Keith Peters's book.  <a href="http://www.amazon.co.jp/ActionScript-3-0-アニメーション-Keith-Peters/dp/4862460496/ref=sr_1_1?ie=UTF8&qid=1365654945&sr=8-1&keywords=actionscript+3.0+animation">Amazon</a></p>
+		<ul>
+			<li><a href="http://processingjs.org">Processing.js</a> - about Processing.js</li>
+			<li><a href="http://www.processing.org">Processing</a> - about Processing</li>
+			<li><a href="http://www.bit-101.com/">BIT-101</a> - Keith Peters</li>
+			<li><a href="http://www.metaphor.co.jp">METAPHOR</a> - My Company</li>
+			<li><a href="http://false.jp">false.jp</a> - My personal project</li>
+			<li><a href="http://mutt.jp">MUTT</a> - My personal project</li>
+		</ul>
+	</div>
+	</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-40217031-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

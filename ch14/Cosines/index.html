@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Processing.js Animation</title>
+	<meta name="description" content="Processing.js Animation Examples. Based on Keith Peters's book. " />
+	<meta name="keywords" content="processing, processing.js, flash, animation, false.jp, METAPHOR, metaphor, metaphor inc, metaphor.co.jp, Design, web, web design, toshiyuki nagashima, Reactive, Kinetic, Design, Interface, Interactive, Interaction, Interactive Art, Kinetic Art, Software Art" />
+	<meta name="Robots" content="index,follow" />	
+	<link rel="shortcut icon" href="" />
+	<link rel="home" href="" />
+	<link rel="index" href="" />
+	<script src="../../global/scripts/lib/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../global/scripts/lib/processing-1.4.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../global/scripts/base.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="../../global/styles/base.css" type="text/css" />
+	<script type="text/javascript" src="../../global/syntaxhighlighter3/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../../global/syntaxhighlighter3/scripts/shBrushJScript.js"></script>
+	<script type="text/javascript" src="../../global/syntaxhighlighter3/scripts/shBrushProcessing.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../global/syntaxhighlighter3/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+<body>
+<header id="globalheader">
+	<h1>ch14: Cosines</h1>
+</header>
+
+<div id="main">
+	<canvas id="canvas" data-processing-sources="Cosines.pde"></canvas>
+</div>
+
+<div class="sourceContainer">
+<script class="brush: processing; toolbar: false;" type="syntaxhighlighter"><![CDATA[
+Segment segment0;
+Segment segment1;
+float cycle;
+float offset = - PI/2;
+
+void setup() {
+  size(960, 540);
+  frameRate(30);
+  initialize();
+}
+
+void initialize() {
+  smooth();
+  
+  segment0 = new Segment(100, 20);    
+  segment1 = new Segment(100, 20);
+  segment1.x = width/2;
+  segment1.y = height/2;
+}
+
+void draw() {
+  background(255);
+
+  float dx = mouseX - segment1.x;
+  float dy = mouseY - segment1.y;
+  float dist = sqrt(dx * dx + dy * dy);
+      
+  float a = 100;
+  float b = 100;
+  float c = min(dist, a + b);
+      
+  float B = acos((b * b - a * a - c * c) / (-2 * a * c));
+  float C = acos((c * c - a * a - b * b) / (-2 * a * b));
+  float D = atan2(dy, dx);
+  float E = D + B + PI + C;
+      
+  segment1.rotation = (D + B) * 180 / PI;
+  segment0.x = segment1.getPin().x;
+  segment0.y = segment1.getPin().y;
+  segment0.rotation = E * 180 / PI;
+      
+  segment0.update();
+  segment1.update();
+}
+
+////////////////////////////////
+
+class Segment extends Sprite {
+  float segmentWidth, segmentHeight;
+  float vx, vy;
+  
+  Segment(float segmentWidth, float segmentHeight) {
+    super();
+    this.segmentWidth = segmentWidth;
+    this.segmentHeight = segmentHeight;
+  }
+  
+  void draw() {
+    rect(-segmentHeight / 2,  -segmentHeight / 2, segmentWidth + segmentHeight, segmentHeight, segmentHeight, segmentHeight, segmentHeight, segmentHeight);
+    ellipse(0, 0, 2, 2);
+    ellipse(segmentWidth, 0, 2, 2);
+  }
+  
+  Point getPin() {
+    float angle = rotation * PI / 180;
+    float xPos = x + cos(angle) * segmentWidth;
+    float yPos = y + sin(angle) * segmentWidth;
+    return new Point(xPos, yPos);  
+  }
+}
+
+////////////////////////////////
+
+class Sprite extends Object {
+  float x, y;
+  float scaleX, scaleY;
+  float width, height;
+  float rotation;
+  boolean visible;
+  color strokeColor;
+  color fillColor;
+  Boolean isStroke;
+  Boolean isFill;
+  Boolean isRollOver;
+  Boolean locked;
+  float xoff, yoff;
+ 
+  Sprite() {
+    super();
+    scaleX = 1.0;
+    scaleY = 1.0;
+    strokeColor = color(0);
+    fillColor = color(0);
+    isStroke = false;
+    isFill = false;
+    isRollOver = false;
+    locked = false;
+    visible = true;
+  }
+  
+  void update() {
+    if(! visible) return;
+    pushMatrix();
+    if(locked){
+      x = mouseX - xoff;
+      y = mouseY - yoff;
+    }  
+    translate(x, y);
+    scale(scaleX, scaleY);
+    rotate(rotation * PI / 180.0);
+    if(isStroke) stroke(strokeColor);
+    if(isFill) fill(fillColor);
+    draw();
+    popMatrix();
+  }
+  
+  void setStrokeColor(color strokeColor) {
+    this.strokeColor = strokeColor;
+    isStroke = true;
+  }
+  
+  void setFillColor(color fillColor) {
+    this.fillColor = fillColor;
+    isFill = true;
+  }
+  
+  void startDrag() {
+    if(isRollOver){
+      locked = true;
+      xoff = mouseX - x;
+      yoff = mouseY - y;
+    }
+  }
+  
+  void stopDrag() {
+    locked = false;
+  }
+  
+  void draw() {}
+}
+
+////////////////////////////////
+
+class Point extends Object {
+  float x, y;
+  
+  Point(float x, float y) {
+    super();
+    this.x = x;
+    this.y = y;
+  }
+}
+
+////////////////////////////////
+
+class Object {
+  Object() {}
+}
+
+
+]]></script>
+</div>
+
+
+<div class="readme">
+	<div class="readmebox">
+	<div class="readme_left">
+		<p>Processing.js Animation Examples. Based on Keith Peters's book.  <a href="http://www.amazon.co.jp/ActionScript-3-0-アニメーション-Keith-Peters/dp/4862460496/ref=sr_1_1?ie=UTF8&qid=1365654945&sr=8-1&keywords=actionscript+3.0+animation">Amazon</a></p>
+		<ul>
+			<li><a href="http://processingjs.org">Processing.js</a> - about Processing.js</li>
+			<li><a href="http://www.processing.org">Processing</a> - about Processing</li>
+			<li><a href="http://www.bit-101.com/">BIT-101</a> - Keith Peters</li>
+			<li><a href="http://www.metaphor.co.jp">METAPHOR</a> - My Company</li>
+			<li><a href="http://false.jp">false.jp</a> - My personal project</li>
+			<li><a href="http://mutt.jp">MUTT</a> - My personal project</li>
+		</ul>
+	</div>
+	</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-40217031-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>
