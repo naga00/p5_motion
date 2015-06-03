@@ -1,0 +1,165 @@
+/* RESET */
+html,body,div,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,form,p,blockquote,fieldset,input,abbr,article,aside,command,details,figcaption,figure,footer,header,hgroup,mark,meter,nav,output,progress,section,summary,time { margin: 0; padding: 0; }
+h1,h2,h3,h4,h5,h6,pre,code,address,caption,cite,code,em,strong,th,figcaption { font-size: 1em; font-weight: normal; font-style: normal; }
+fieldset,iframe { border: none; }
+caption,th { text-align: left; }
+table { border-collapse: collapse; border-spacing: 0; }
+article,aside,footer,header,hgroup,nav,section,figure,figcaption { display: block; }
+
+.clear { clear: both; }
+.clearer { clear: both; display: block; margin: 0; padding: 0; height: 0; line-height: 1px; font-size: 1px; }
+.selfclear { zoom:1; }
+.selfclear:after { content:'.'; display:block; height:0; clear:both; visibility:hidden; }
+
+a { color: #003399; }
+a:link, a:visited, a:active { text-decoration: underline; }
+a:hover { text-decoration: underline; }
+a:visited {color: #999999; }
+
+h1,h2,h3,h4,h5,h6,strong { color:#111111; }
+h1,h2,h3,h4 { font-weight: bold; }
+
+ul li {
+	list-style: none;	
+}
+
+img{ 
+	border-style:none;
+	border: 0px none;
+	vertical-align:top; 
+}
+br { letter-spacing: 0; }
+.clear {clear:both;}
+.clear_left {clear:left;}
+.clear_right {clear:right;}
+.textred {color:#00a0e9;}
+.textgray {color:#969696;}
+.textleft{ text-align:left; }
+.textcenter{ text-align:center; }
+.textright{ text-align:right; }
+.texttop{ vertical-align:top; }
+.textmiddle{ vertical-align:middle; }
+.textbottom{ vertical-align:bottom; }
+
+.textblue { color: #0080cb; }
+.textpurple { color: #611c86; }
+.textgreen { color: #21ab37; }
+.textpink { color: #e3007e; }
+
+
+ 
+/* LAYOUT */
+html { 	
+	background: #ffffff;
+	height:100%;
+	margin:0 0;
+	padding: 0 0;
+}
+
+body {
+	background: #ffffff;
+	height:100%;
+	margin:0 0;
+	padding: 0 0;
+	color: #333333;
+}
+
+/* header */
+header#globalheader { 
+	display: block;
+	width: 960px;
+	margin: 60px auto 40px auto;
+}
+
+header#globalheader h1 {
+	font-size: 20px;	
+}
+
+/* footer */
+footer#globalfooter {  
+    bottom: 0px;
+    height: 20px;
+    width: 100%; 
+    margin: 0px auto 0 auto;
+}
+
+canvas {
+	display: block;
+	margin: 0 auto 0 auto;
+	border: 1px dotted #DEDEDE;
+}
+
+.sourceContainer {
+	display: block;
+	margin: 30px auto 30px auto;
+	width: 954px;
+}
+
+.syntaxhighlighter {  overflow-y: hidden !important;  padding: 1px !important; 	border: 1px dotted #DEDEDE;　}
+
+aside {
+	font-size: small;
+	text-align: right;
+}
+
+.readme {
+	float: left;
+	width: 100%;
+	padding: 30px 0 50px 0;	
+}
+
+.readmebox{
+	display: block;
+	width: 960px;
+	margin: 0px auto 0px auto;
+}
+
+.readme_left {
+	float:left;
+	width: 720px;
+}
+
+.readme_right {
+	float:left;
+	width: 240px;
+}
+
+.readme p {
+	font-size: 12px;
+	width: 720px;
+	margin: 0 0 30px 0;
+}
+
+.readme ul.links {
+	font-size: 12px;
+	line-height: 180%;
+}
+
+#main {
+	width: 960px;
+	margin: 0px auto 10px auto;	
+}
+
+.chapterContainer {
+	float: left;
+	width: 960px;
+	margin: 30px 0 30px 0;
+}
+
+.chapterBox {
+	float: left;
+	width: 240px;
+}
+
+.chapterBox h2 {
+	width: 240px;
+	margin: 0 0 10px 0;
+}
+
+.chapterBox ul.chaper {
+	width: 240px;
+	margin: 0 0 60px 0;
+	font-size: 14px;
+	line-height: 200%;
+	color: #aaaaaa;
+}
