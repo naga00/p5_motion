@@ -39,7 +39,7 @@ void draw() {
   vx += ax;
   vy += ay;
   vz += az;
-  vy -= gravity;
+  vy += gravity;
       
   for(int i=0; i<numTrees; i++) {
     Tree tree = trees[i];
@@ -52,7 +52,12 @@ void draw() {
 }
 
 void move(Tree tree) {
+  tree.xpos += vx;
+  tree.ypos += vy;
   tree.zpos += vz;
+  if(tree.ypos > floor) {
+    tree.ypos = floor;
+  }
   if(tree.zpos < -fl) {
     tree.zpos += 10000;
   }
@@ -99,7 +104,29 @@ void keyPressed() {
       ax = -1;
       break;
     case CONTROL:
-      ay = 1;
+      ay = -1;
+      break;
+    default:
+      break;
+  }
+}
+
+void keyReleased() {
+  switch(keyCode) {
+    case UP:
+      az = 0;
+      break;
+    case DOWN:
+      az = 0;
+      break;
+    case LEFT:
+      az = 0;
+      break;
+    case RIGHT:
+      ax = 0;
+      break;
+    case CONTROL:
+      ay = 0;
       break;
     default:
       break;
@@ -248,5 +275,3 @@ class Point extends Object {
 class Object {
   Object() {}
 }
-
-
